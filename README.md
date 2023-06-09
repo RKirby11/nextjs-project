@@ -2,7 +2,7 @@
 
 A personal project to practise React and learn the basics of the NextJS framework.
 
-This repository interacts with a Rails API to manage user authentication (using JWT tokens) and database management.
+This repository interacts with a Rails API (https://github.com/RKirby11/rails-api-for-react) to manage user authentication (using JWT tokens) and database management.
 
 The idea of the project was to create a web app which offers artists a new random word each day to inspire them. It offers the ability to sign up, discover the word of the day, upload (or take) a photo of their resulting art, and save it to review in the future.
 
