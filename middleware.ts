@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
     const publicRoutes = ["/"];
-    const authRoutes =  ["/login", "/api/auth/login"];
+    const authRoutes =  ["/login", "/signup", "/api/auth/signup", "/api/auth/login"];
 
     const token = request.cookies.get("jwtToken")?.value;
     const requiresAuth = !publicRoutes.includes(request.nextUrl.pathname) && !authRoutes.includes(request.nextUrl.pathname);

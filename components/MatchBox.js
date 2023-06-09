@@ -10,17 +10,19 @@ import Image from 'next/image';
 
 const slider = React.createRef();
 const container = React.createRef();
-const isTouchDevice = 'ontouchstart' in document.documentElement
 
 export default class MatchBox extends Component {
     state = {
         lightMatch: false,
+        isTouchDevise: false,
+
     };
 
     //invoked immmediatlly after component is mounted
     componentDidMount() {
+        this.setState({ isTouchDevice: 'ontouchstart' in document.documentElement });
         //check if touch device (e.g mobile or tablet) or not and set event listeners accordingly
-        if (isTouchDevice) {
+        if (this.isTouchDevice) {
             document.addEventListener('touchmove', this.onDrag);
             document.addEventListener('touchend', this.stopDrag);
         }
@@ -35,7 +37,7 @@ export default class MatchBox extends Component {
 
     onDrag = e => {
         if (this.isDragging && !this.disable) {
-            if (isTouchDevice) {
+            if (this.isTouchDevice) {
                 this.sliderWidth = Math.min(Math.max(0, e.touches[0].clientX - this.startX), (this.strikePoint));
             } else {
                 this.sliderWidth = Math.min(Math.max(0, e.clientX - this.startX), (this.strikePoint));
@@ -74,7 +76,7 @@ export default class MatchBox extends Component {
     startDrag = e => {
         if (!this.disable) {
             this.isDragging = true;
-            if (isTouchDevice) {
+            if (this.isTouchDevice) {
                 this.startX = e.touches[0].clientX;
             } else {
                 this.startX = e.clientX;

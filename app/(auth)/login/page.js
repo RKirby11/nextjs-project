@@ -13,16 +13,19 @@ export default function Login() {
     const [error, setError] = useState("");
     const router = useRouter();
 
-    const handleSubmit = async (e, email, password) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        setError("");
         setLoading(true);
+        console.log("submitting");
         try {
             const body = isLogin 
                 ? {email: email, password: password} 
-                : {name: name, email: email, password: password, password_confirmation: confirmpass};
-            const response = await fetch(`/api/auth/${ isLogin ? "login" : "signup" }`, {
+                : {name: name, email: email, password: password, confirmPassword: confirmpass};
+            const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
+            const response = await fetch(url, {
                 method: 'POST',
-                body: JSON.stringify(body),
+                body: JSON.stringify(body)
             });
             const data = await response.json();
             if (data.error) {
@@ -41,31 +44,37 @@ export default function Login() {
             setError('Sorry, something went wrong. Please try again.');
         }
     }
+
+    function toggleView() {
+        setIsLogin(!isLogin);
+        setError("");
+    }
+
     return (
         <div className="flex flex-col items-center h-full px-8 justify-between">
-            <h1 className="mt-5 text-2xl font-bold flex items-center">
+            <h1 className="my-5 text-2xl font-bold">
                 { isLogin ? "Login" : "Sign Up"}
             </h1>
-            <p className="w-full h-12 text-blue text-center flex items-center">
+            <p className={`text-blue text-center ${ error ? "mb-5" : ""}`}>
                 { error }
             </p>
             { 
                 loading 
                 ? <div className={`${isLogin ? "h-2/3" : "h-3/4"}`}>
-                    <Spinner color="indigo" className="h-12 w-12 mt-10"/>
+                    <Spinner color="indigo" className="h-12 w-12 my-10"/>
                 </div>
                 :  <> 
                     <form 
                         className={`flex flex-col items-center justify-center ${isLogin ? "h-2/3" : "h-3/4"}`}
                         aria-label="Login Form"
-                        onSubmit={ e => handleSubmit(e, email, password) }
+                        onSubmit={ e => handleSubmit(e) }
                     >
                         <input 
                             className={`w-56 p-2 rounded-md mb-5 border-2 hover:border-purple focus:outline-none focus:border-purple 
                                 ${isLogin ? "hidden" : ""}`
                             }
                             type='text' 
-                            placeholder='Enter Username' 
+                            placeholder='Enter username' 
                             aria-label="username input" 
                             onChange={ e => setName(e.target.value)} 
                         />
@@ -99,7 +108,7 @@ export default function Login() {
                     </form>
                     <button 
                         className='w-full cursor-pointer underline hover:text-purple py-5'
-                        onClick={() => setIsLogin(!isLogin)}>
+                        onClick={() => toggleView()}>
                             { isLogin ? "Don't have an account? Sign Up!" : "Already have an account? Login!" }
                     </button>
                 </>

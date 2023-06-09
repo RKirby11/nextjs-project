@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NextResponse, NextRequest } from 'next/server';
-import next from "next/types";
 
 interface LoginForm {
     email: string,
@@ -35,6 +34,7 @@ function getMidnight(): Date {
 }
 
 export async function POST(req: NextRequest) {
+    console.log('in api')
     try {
         const { email, password }: LoginForm = await req.json();
         
