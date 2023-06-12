@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Spinner } from "@material-tailwind/react";
 
 export default function Login() {
@@ -12,15 +12,16 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const verification_token = searchParams.get('token')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError("");
         setLoading(true);
-        console.log("submitting");
         try {
             const body = isLogin 
-                ? {email: email, password: password} 
+                ? {email: email, password: password, email_verification_code: verification_token} 
                 : {name: name, email: email, password: password, confirmPassword: confirmpass};
             const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
             const response = await fetch(url, {
@@ -30,9 +31,10 @@ export default function Login() {
             const data = await response.json();
             if (data.error) {
                 setLoading(false);
-                setError(data.error);
+                if(Array.isArray(data.error)) setError(data.error[0])
+                else setError(data.error);
             }
-            else if (isLogin) router.push("/dashboard");
+            else if (isLogin) router.push("/");
             else {
                 setIsLogin(true);
                 setLoading(false);
@@ -51,7 +53,7 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center h-full px-8 justify-between">
+        <div className="flex flex-col items-center h-full px-8 py-10 justify-between">
             <h1 className="my-5 text-2xl font-bold">
                 { isLogin ? "Login" : "Sign Up"}
             </h1>
