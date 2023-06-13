@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    const authRoutes =  ["/login", "/signup", "/api/auth/signup", "/api/auth/login"];
+    const authRoutes =  [
+        "/login", 
+        "/signup", 
+        "/api/auth/signup",
+        "/api/auth/login", 
+        "/api/auth/verify", 
+        "/api/auth/request-password-reset", 
+        "/api/auth/reset-password"
+    ];
 
     const token = request.cookies.get("jwtToken")?.value;
     if(!authRoutes.includes(request.nextUrl.pathname) && !token) {

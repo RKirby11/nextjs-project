@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from 'next/server';
 interface LoginForm {
     email: string,
     password: string,
-    email_verification_code: string | null
+    verificationCode: string | null
 }
 
 interface JwtToken {
@@ -17,11 +17,11 @@ interface JwtToken {
 }
 
 // https://codevoweb.com/jwt-authentication-in-nextjs-13-api-route-handlers/?utm_content=cmp-true
-async function getJwtToken(email: string, password: string, email_verification_code: string | null ): Promise<JwtToken>{
+async function getJwtToken(email: string, password: string, verificationCode: string | null ): Promise<JwtToken>{
     const response = await axios.post("http://localhost:3000/auth/login", { 
             email: email,
             password: password,
-            email_verification_code: email_verification_code
+            email_verification_code: verificationCode
         },
         { withCredentials: true }
     );
@@ -37,13 +37,13 @@ function getMidnight(): Date {
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, password, email_verification_code }: LoginForm = await req.json();
+        const { email, password, verificationCode }: LoginForm = await req.json();
         
         if(! email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
             return new NextResponse(JSON.stringify({ error: 'Please enter a valid email address.' }), { status: 400 });
         }
 
-        const response: JwtToken = await getJwtToken(email, password, email_verification_code);
+        const response: JwtToken = await getJwtToken(email, password, verificationCode);
 
         const cookieOptions = {
             name: "jwtToken",

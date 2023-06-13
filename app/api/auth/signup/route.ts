@@ -15,7 +15,7 @@ async function createAccount(name: string, email: string, password: string, conf
             email: email,
             password: password,
             user_name: name,
-            confirm_password: confirmPassword
+            password_confirmation: confirmPassword
         },
         { withCredentials: true }
     );
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     try {
         const { name, email, password, confirmPassword }: SignUpForm = await req.json();
         await createAccount(name, email, password, confirmPassword);
-        return new NextResponse(JSON.stringify({ message: 'User Created Successfully'}), { status: 200});
+        return new NextResponse(JSON.stringify({ message: 'Account created! Please check your emails for a verification link'}), { status: 200});
     } catch (error: any) {
         const errorMsg = error.response?.data?.error
         ? (error.response.data as { error: string }).error
