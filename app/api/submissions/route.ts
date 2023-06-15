@@ -25,7 +25,6 @@ async function handleS3Upload(s3Key: string, fileContent: string, fileType: stri
     });
     try {
         const response = await s3Client.send(command);
-        console.log('AWS Response: ', response);
     }
     catch (error) {
         throw new Error(`S3 Upload failed: ${error}`);
@@ -47,7 +46,6 @@ async function handleSubmissionSave(userName: string, s3Key: string, note: strin
             },
             withCredentials: true
         });
-        console.log('Rails Response: ', response.data);
     } catch(error : any) {
         throw new Error(`Submission Save failed: ${error.response.data.error}`);
     }
@@ -64,14 +62,13 @@ export async function POST(request: NextRequest) {
         const fileType: string = JSON.parse(formData.fileInfo).type as string;
         const fileName: string = JSON.parse(formData.fileInfo).name as string;
         const userName: KeyValuePair = request.cookies.get("userName") as KeyValuePair;
-        const s3Key = `${userName.value}-${Date.now()}-${fileName}`;
+        const s3Key = `submissions/${userName.value}-${Date.now()}-${fileName}`;
         const jwtToken: KeyValuePair = request.cookies.get("jwtToken") as KeyValuePair;
 
         await handleS3Upload(s3Key, formData.fileContent, fileType);
         await handleSubmissionSave(userName.value, s3Key, formData.note, jwtToken.value);
         return new NextResponse(JSON.stringify({ message: 'Submission Saved Successfully' }));
     } catch(error) {
-        console.log('error: ', error);
         return new NextResponse(JSON.stringify({ error: 'An Error occured' }), { status: 500 });
     }
 }
@@ -93,7 +90,6 @@ async function handleSubmissionRetrieval(userName: string, jwtToken: string, pag
             },
             withCredentials: true
         });
-        console.log('Rails Response: ', response.data);
         return response.data
     } catch(error : any) {
         throw new Error(`Submission Retrieval failed: ${error.response.data.error}`);
@@ -109,7 +105,6 @@ export async function GET(request: NextRequest) {
         const submissions = await handleSubmissionRetrieval(userName.value, jwtToken.value, page, perPage);
         return new NextResponse(JSON.stringify({ submissions: submissions }));
     } catch(error) {
-        console.log('error: ', error);
         return new NextResponse(JSON.stringify({ error: 'An Error occured' }), { status: 500 });
     }
 }

@@ -14,6 +14,5 @@ export async function GET(req: NextRequest) {
 
     response.cookies.delete("jwtToken");
     response.cookies.delete("userName");
-
     return response;
 }

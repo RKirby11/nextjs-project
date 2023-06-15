@@ -23,7 +23,6 @@ async function resetPassword(password: string, confirmPassword: string, resetTok
 export async function POST(req: NextRequest) {
     try {
         const { password, confirmPassword, resetToken }: ResetPasswordForm = await req.json();
-        console.log(password, confirmPassword, resetToken)
         await resetPassword(password, confirmPassword, resetToken);
         return new NextResponse(JSON.stringify({ message: 'Your Password has been reset'}), { status: 200});
     } catch (error: any) {

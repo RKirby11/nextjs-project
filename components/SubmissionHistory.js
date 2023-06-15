@@ -10,7 +10,7 @@ export default function SubmissionHistory() {
     const perPage = 6;
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalSubmission, setModalSubmission] = useState(null);
 
@@ -57,7 +57,7 @@ export default function SubmissionHistory() {
     return (
         <>
             { modalOpen && <SubmissionModal submission={modalSubmission} toggleModal={toggleModal} ></SubmissionModal>}
-            <div className="grid grid-cols-l md:grid-cols-2 lg:grid-cols-3 gap-5 h-5/6 overflow-x-hidden overflow-y-scroll">
+            <div className={`grid grid-cols-l md:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-hidden overflow-y-scroll ${submissions.length ? 'h-5/6' : 'h-0'}`}>
                 {
                     submissions.map((submission) => {
                         return <SubmissionCard key={submission.date} submission={submission} toggleModal={toggleModal}></SubmissionCard>
@@ -66,21 +66,20 @@ export default function SubmissionHistory() {
             </div>
             <div className="flex w-full justify-center mt-8 text-lg">
                 {
-                    loading ?
-                    <Spinner color="indigo" className="h-12 w-12"/> :
-                    <>
-                        <button 
-                        className={
-                            `h-12 w-64 text-pink font-bold border-pink border-2 border-solid rounded-md
-                            hover:bg-pink hover:text-white transition-all duration-300 ease-in-out 
-                            ${ hasMore ? "block" : "hidden"}`
-                        }
-                        onClick={loadMore}
-                        >
-                            Load More
-                        </button>
-                        <p className={`text-purple ${error ? "block" : "hidden"}`}>{ error }</p>
-                    </>
+                    loading 
+                    ? <Spinner color="indigo" className="h-12 w-12"/> 
+                    :   <>
+                            <button 
+                                className={
+                                    `h-12 w-64 text-pink font-bold border-pink border-2 border-solid rounded-md
+                                    hover:bg-pink hover:text-white transition-all duration-300 ease-in-out 
+                                    ${ hasMore ? "block" : "hidden"}`
+                                }
+                                onClick={loadMore}
+                            >Load More
+                            </button>
+                            <p className={`text-purple ${error ? "block" : "hidden"}`}>{ error }</p>
+                        </>
                 }
             </div>
         </>

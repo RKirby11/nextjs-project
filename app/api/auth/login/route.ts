@@ -13,7 +13,8 @@ interface JwtToken {
         expiry: number
     },
     username: string,
-    todays_word: string
+    todays_word: string,
+    avatar_url: string | null
 }
 
 // https://codevoweb.com/jwt-authentication-in-nextjs-13-api-route-handlers/?utm_content=cmp-true
@@ -66,8 +67,15 @@ export async function POST(req: NextRequest) {
                 name: "dailyWord",
                 value: response.todays_word,
                 expires: getMidnight()
-            })
+            }),
         ])
+        if(response.avatar_url !== null) {
+            await nxtResponse.cookies.set({
+                name: "avatarURL",
+                value: response.avatar_url,
+                maxAge: response.jwt.expiry
+            });
+        }
         return nxtResponse;
     } catch (error: any) {
         const errorMsg = error.response?.status === 401

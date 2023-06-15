@@ -5,7 +5,6 @@ interface VerificationForm {
     email: string,
 }
 
-// https://codevoweb.com/jwt-authentication-in-nextjs-13-api-route-handlers/?utm_content=cmp-true
 async function sendVerification(email: string): Promise<void> {
     const response = await axios.post("http://localhost:3000/auth/resend_verification", { 
             email: email,
@@ -14,7 +13,6 @@ async function sendVerification(email: string): Promise<void> {
     );
     return response.data;
 }
-
 
 export async function POST(req: NextRequest) {
     try {

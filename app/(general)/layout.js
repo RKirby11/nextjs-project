@@ -4,6 +4,7 @@ export default function Layout({ children }) {
     const cookieStore = cookies();
     const userName = cookieStore.get('userName');
     const todaysWord = cookieStore.get('dailyWord');
+    const avatarURL = cookieStore.has('avatarURL') ? cookieStore.get('avatarURL').value : '/avatar.svg';
     return (
         <>    
             <header>
@@ -12,8 +13,8 @@ export default function Layout({ children }) {
                         Todays Word: <span className="text-3xl">{todaysWord.value}</span>
                     </div>
                     <div className='flex items-center'>
-                        <p className='text-2xl mr-4'>Hi {userName.value}!</p>
-                        <NavOptions></NavOptions>
+                        <p className='text-2xl mr-2'>Hi {userName.value}!</p>
+                        <NavOptions avatarURL={avatarURL}></NavOptions>
                     </div>
                 </nav>
             </header>
