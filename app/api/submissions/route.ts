@@ -4,7 +4,6 @@ import {S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { KeyValuePair } from 'tailwindcss/types/config';
 
 interface FormData {
-    fileInfo: string;
     fileContent: string;
     note: string | null;
 }
@@ -55,17 +54,14 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.formData();
         const formData: FormData = {
-            fileInfo: data.get('fileInfo') as string,
             fileContent: data.get('fileContent') as string,
             note: data.get('note') as string | null
         }
-        const fileType: string = JSON.parse(formData.fileInfo).type as string;
-        const fileName: string = JSON.parse(formData.fileInfo).name as string;
         const userName: KeyValuePair = request.cookies.get("userName") as KeyValuePair;
-        const s3Key = `submissions/${userName.value}-${Date.now()}-${fileName}`;
+        const s3Key = `submissions/${userName.value}-${Date.now()}.jpeg`;
         const jwtToken: KeyValuePair = request.cookies.get("jwtToken") as KeyValuePair;
 
-        await handleS3Upload(s3Key, formData.fileContent, fileType);
+        await handleS3Upload(s3Key, formData.fileContent, 'image/jpeg');
         await handleSubmissionSave(userName.value, s3Key, formData.note, jwtToken.value);
         return new NextResponse(JSON.stringify({ message: 'Submission Saved Successfully' }));
     } catch(error) {

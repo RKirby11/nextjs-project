@@ -1,62 +1,49 @@
 "use client";
 import React, { useState, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Camera from "/components/Camera.js";
+import ImageCropper from './ImageCropper';
+import readFile from '/utils/readFile.js';
 
 export default function SubmissionEntry() {
     const uploadInput = useRef(null);
     const [useCamera, setUseCamera] = useState(false);
-    const [fileURL, setFileURL] = useState(null);
-    const [fileInfo, setFileInfo] = useState(null);
+    const [uploadedImg, setUploadedImg] = useState(null);
     const [fileContent, setFileContent] = useState(null);
     const [note, setNote] = useState(null);
     const [status, setStatus] = useState('upload');
     const [error, setError] = useState(null);
-    const router = useRouter();
 
-    const saveCameraImg = useCallback((url) => {
-        setFileURL(url);
-        setFileContent(url);
-        setFileInfo({name: `screenshot-${Date.now()}.jpg`, type: "jpeg"})
+    const saveCameraImg = useCallback((base64Img) => {
+        setFileContent(base64Img);
         setUseCamera(false);
         setStatus('confirm');
     }, []);
 
-    const saveUploadedImg = useCallback( async () => {
-        if(uploadInput.current?.files && uploadInput.current.files.length > 0) {
-            const file = uploadInput.current.files[0];
-            const convertedFile = await convertToBase64(file);
-            setFileURL(URL.createObjectURL(file));
-            setFileInfo({name: file.name, type: file.type});
-            setFileContent(convertedFile);
-            uploadInput.current.value = "";
-            setStatus('confirm');
-        }
-    }, []);
+    const selectImage = async (e) => {
+        const file = e.target.files[0];
+        let imageUrl = await readFile(file);
+        setUploadedImg(imageUrl);
+        uploadInput.current.value = "";
+    };
 
-    const convertToBase64 = useCallback((file) => {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-        });
+    const saveUploadedImg = useCallback( async (croppedImg) => {
+        setFileContent(croppedImg);
+        setStatus('confirm');
     }, []);
 
     const reset = useCallback(() => {
-        setFileURL(null);
-        setFileInfo(null);
         setFileContent(null);
         setNote(null);
         setStatus('upload');
     }, []);
 
     const submit = useCallback(async() => {
-        if(fileInfo && fileContent) {
+        if(fileContent) {
             try {
                 const form = new FormData();
-                form.append('fileInfo', JSON.stringify(fileInfo));
+                // form.append('fileInfo', JSON.stringify(fileInfo));
                 form.append('fileContent', fileContent);
                 form.append('note', note);
 
@@ -75,29 +62,31 @@ export default function SubmissionEntry() {
                 setError('Sorry, an error occurred uploading this submission. Please try again.');
             }
         }
-    }, [fileInfo, fileContent, note]);
+    }, [fileContent, note]);
 
     return (
-        <div className="flex flex-col items-center">
-            <div>
+        <div className="h-full flex flex-col items-center justify-center">
+            <div className='flex flex-col items-center'>
                 {
                     status === 'upload' && useCamera ?
                         <Camera useCamera={useCamera} saveCameraImg={saveCameraImg}></Camera> 
                     : status === 'upload' ?
-                        <Image src="/camera.svg" width="300" height="300" alt='Camera Icon'/>
+                        <Image src="/camera.svg" width="200" height="200" alt='Camera Icon'/>
                     : status === 'confirm' ?
                         <>
                             <Image
                                 alt="not found"
-                                height="300"
-                                width="300"
-                                src={fileURL}
+                                height="200"
+                                width="200"
+                                src={fileContent}
                             />
                             <div className="w-[300px] flex mt-5 flex-col align-center items-center">
                                 <h2 className="text-2xl font-bold text-pink">Looks Great!</h2>
                                 <textarea
                                     placeholder="Add a note?.."
-                                    className="p-5 max-h-32 text-offblack bg-white w-full border-2 border-solid border-pink rounded-md mt-5 focus:outline-purple"
+                                    maxLength="200"
+                                    rows="2"
+                                    className="p-2 resize-none text-offblack bg-white w-full border-2 border-solid border-pink rounded-md mt-5 focus:outline-purple"
                                     onChange={(event) => setNote(event.target.value)}
                                 ></textarea>
                                 <button className="bg-pink w-full h-10 text-white rounded-sm mt-4" onClick={submit}>
@@ -115,12 +104,12 @@ export default function SubmissionEntry() {
                     : status === 'complete' ?
                         <>
                             <Image src="/greenTick.svg" width="300" height="300" alt='Green Tick Icon'/>
-                            <p className={`w-full mt-5 text-xl text-purple text-center`}>
+                            <p className={`w-full mt-5 text-xl text-green font-bold text-center`}>
                                 Submission Complete!
                             </p>
                             <div className="flex mt-5 flex-col align-center items-center">
                                 <Link 
-                                    className="bg-purple w-full h-10 text-white rounded-md mt-4 flex justify-center items-center" 
+                                    className="bg-purple w-full h-10 px-4 text-white rounded-md mt-4 flex justify-center items-center" 
                                     href='/history'
                                 >
                                     View Past Entries
@@ -145,7 +134,7 @@ export default function SubmissionEntry() {
                         accept=".png, .jpg, .jpeg"
                         className="hidden"
                         ref={uploadInput}
-                        onChange={(event) => saveUploadedImg(event.target.files[0])}
+                        onChange={selectImage}
                     />
                 </div>
                 <div className={`flex ${ status === 'upload' ? "block" : "hidden"}`}>
@@ -157,6 +146,7 @@ export default function SubmissionEntry() {
                     </button>
                 </div>
             </div>
+            <ImageCropper uploadedImg={uploadedImg} setUploadedImg={setUploadedImg} onComplete={(croppedImg) => {saveUploadedImg(croppedImg)}}/>
         </div>
     );
 };

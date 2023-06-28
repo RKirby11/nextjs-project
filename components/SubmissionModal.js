@@ -8,7 +8,7 @@ export default function SubmissionModal({submission, toggleModal}) {
             <button className='absolute top-0 right-0 mt-5 mr-5 text-2xl hover:underline' onClick={() => toggleModal(null)}>X</button>
             <div className='w-full h-full flex flex-col justify-center items-center'>
                 <h2 className='text-2xl mb-5'>Word: <b>{ submission.word }</b></h2>
-                <Image src={submission.image_url} alt='submission image' width={500} height={500} className='rounded-md'/>
+                <Image src={submission.image_url} alt='submission image' width={300} height={300} className='rounded-md'/>
                 <p className='text-lg mt-5'>{ formattedDate }</p>
                 <p className='text-lg mt-5'>{ submission.note }</p>
             </div>

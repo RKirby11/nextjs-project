@@ -17,7 +17,8 @@ export default class MatchBox extends Component {
         isDragging: false,
         strikePoint: 0,
         sliderWidth: 0,
-        startX: 0
+        startX: 0,
+        mounted: false
     }
 
     //invoked immmediatlly after component is mounted
@@ -33,6 +34,7 @@ export default class MatchBox extends Component {
             document.addEventListener('mouseup', this.stopDrag);
         }
         this.setState({ strikePoint : container.current.clientWidth * 0.45});
+        this.setState({ mounted: true });
     }
 
     onDrag = e => {
@@ -85,7 +87,7 @@ export default class MatchBox extends Component {
 
                 {/* Match Display Set Up */}
                 <div 
-                    className="relative"
+                    className={`relative opacity-0 transition-all duration-1000 ease-out ${this.state.mounted ? "opacity-100" : ""}`}
                     data-tooltip-id="btn-tooltip"
                     data-tooltip-content="Swipe the match along the matchbox to light it!"
                     data-tooltip-place="bottom"

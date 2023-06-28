@@ -29,13 +29,6 @@ async function getJwtToken(email: string, password: string, verificationCode: st
     return response.data;
 }
 
-function getMidnight(): Date {
-    const midnight = new Date();
-    midnight.setDate(midnight.getDate() + 1);
-    midnight.setHours(0,0,0,0);
-    return midnight;
-}
-
 export async function POST(req: NextRequest) {
     try {
         const { email, password, verificationCode }: LoginForm = await req.json();
@@ -45,6 +38,7 @@ export async function POST(req: NextRequest) {
         }
 
         const response: JwtToken = await getJwtToken(email, password, verificationCode);
+        const cookieExpiry = new Date(response.jwt.expiry);
 
         const cookieOptions = {
             name: "jwtToken",
@@ -52,7 +46,7 @@ export async function POST(req: NextRequest) {
             httpOnly: true,
             path: "/",
             secure: process.env.NODE_ENV === "production",
-            maxAge: response.jwt.expiry
+            expires: cookieExpiry
         };
 
         const nxtResponse = new NextResponse(JSON.stringify({ message: 'User Logged In Successfully'}), { status: 200});
@@ -61,23 +55,24 @@ export async function POST(req: NextRequest) {
             nxtResponse.cookies.set({
                 name: "userName",
                 value: response.username,
-                maxAge: response.jwt.expiry
+                expires: cookieExpiry
             }),
             nxtResponse.cookies.set({
                 name: "dailyWord",
                 value: response.todays_word,
-                expires: getMidnight()
+                expires: cookieExpiry
             }),
         ])
         if(response.avatar_url !== null) {
             await nxtResponse.cookies.set({
                 name: "avatarURL",
                 value: response.avatar_url,
-                maxAge: response.jwt.expiry
+                expires: cookieExpiry
             });
         }
         return nxtResponse;
     } catch (error: any) {
+        console.log(error)
         const errorMsg = error.response?.status === 401
         ? (error.response.data as { error: string }).error
         : 'Sorry, something went wrong. Please try again later.';

@@ -4,8 +4,7 @@ import {S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { KeyValuePair } from 'tailwindcss/types/config';
 
 interface AvatarImage {
-    fileInfo: string;
-    fileContent: string;
+    file: string;
 }
 
 async function handleS3Upload(s3Key: string, fileContent: string, fileType: string): Promise<void> {
@@ -49,22 +48,24 @@ async function handleAvatarSave(userName: string, s3Key: string, jwtToken: strin
     }
 }
   
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: { username: string }}) {
     try {
+        const userName: KeyValuePair = req.cookies.get("userName") as KeyValuePair;
+        if(userName.value !== params.username) {
+            return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+        }
+
         const data = await req.formData();
         const avatarImage: AvatarImage = {
-            fileInfo: data.get('fileInfo') as string,
-            fileContent: data.get('fileContent') as string,
+            file: data.get('file') as string,
         }
-        const fileType: string = JSON.parse(avatarImage.fileInfo).type as string;
-        const fileName: string = JSON.parse(avatarImage.fileInfo).name as string;
-        const userName: KeyValuePair = req.cookies.get("userName") as KeyValuePair;
-        const s3Key = `avatars/${userName.value}-${Date.now()}-${fileName}`;
+        const s3Key = `avatars/${userName.value}-${Date.now()}.jpeg`;
         const jwtToken: KeyValuePair = req.cookies.get("jwtToken") as KeyValuePair;
         
-        await handleS3Upload(s3Key, avatarImage.fileContent, fileType);
+        await handleS3Upload(s3Key, avatarImage.file, "image/jpeg");
         const presignedImageURL = await handleAvatarSave(userName.value, s3Key, jwtToken.value);
-        const nxtResponse = new NextResponse(JSON.stringify({ message: 'Avatar Uploaded Successfully', avatarUrl: presignedImageURL }));
+        
+        const nxtResponse = new NextResponse(JSON.stringify({ avatarUrl: presignedImageURL }));
         await Promise.all([
             nxtResponse.cookies.set({
                 name: "avatarURL",
@@ -73,6 +74,34 @@ export async function POST(req: NextRequest) {
             }),
         ])
         return nxtResponse;
+
+    } catch(error) {
+        return new NextResponse(JSON.stringify({ error: 'An Error occured' }), { status: 500 });
+    }
+}
+
+
+async function handleAvatarRetrieval(userName: string, jwtToken: string): Promise<string> {
+    try {
+        const response = await axios.get(`http://localhost:3000/users/${userName}/show_avatar`, { 
+            headers: {
+                "Authorization": `Bearer ${jwtToken}`,
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            withCredentials: true
+        });
+        return response.data.avatar_url;
+    } catch(error : any) {
+        throw new Error(`Avatar retrieval failed: ${error.response.data.error}`);
+    }
+}
+
+export async function GET(request: NextRequest, { params }: { params: { username: string }}) {
+    try {
+        const jwtToken: KeyValuePair = request.cookies.get("jwtToken") as KeyValuePair;
+        const presignedImageURL = await handleAvatarRetrieval(params.username, jwtToken.value);
+        return new NextResponse(JSON.stringify({ avatarUrl: presignedImageURL }));
     } catch(error) {
         return new NextResponse(JSON.stringify({ error: 'An Error occured' }), { status: 500 });
     }

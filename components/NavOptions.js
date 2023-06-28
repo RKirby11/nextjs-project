@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import NavLink from "/components/NavLink.js";
 
-export default function NavOptions({avatarURL}) {
+export default function NavOptions({userName, avatarURL}) {
     const [showMenu, setShowMenu] = useState(false);
     const router = useRouter();
     const logout = async () => {
@@ -14,6 +14,7 @@ export default function NavOptions({avatarURL}) {
 
     return ( 
         <>     
+            <p className='text-2xl mr-2'>Hi {userName}!</p>
             <Image
                 src={avatarURL}
                 width="40"
@@ -34,8 +35,9 @@ export default function NavOptions({avatarURL}) {
                 className={`z-20 absolute top-20 right-5 w-64 p-5 bg-pink rounded-sm flex flex-col justify-center items-center text-offwhite text-2xl font-bold
                     ${showMenu ? "" : "hidden"}`
                 }>
-                    <NavLink url="/profile" text="Profile"/>
+                    <NavLink url={`/users/${userName}`} text="Profile"/>
                     <NavLink url="/dashboard" text="Dashboard"/>
+                    <NavLink url="/friends" text="Friends"/>
                     <NavLink url="/submission" text="Submit Entry"/>
                     <NavLink url="/history" text="Past Entries"/>
                     <button 
