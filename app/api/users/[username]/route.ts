@@ -2,10 +2,15 @@ import { NextRequest, NextResponse} from 'next/server';
 import axios from "axios";
 import { KeyValuePair } from 'tailwindcss/types/config';
 
+interface Relationship {
+    status: "self" | "not friends" | "accepted" | "request sent" | "request received",
+    id: number | null
+}
+
 interface UserData {
     bio: string,
     avatar_url: string,
-    is_current_user: boolean
+    relationship: Relationship
 }
 
 async function handleDataRetrieval(userName: string, jwtToken: string): Promise<UserData> {

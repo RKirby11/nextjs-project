@@ -5,7 +5,7 @@ import { KeyValuePair } from 'tailwindcss/types/config';
 interface User {
     id: number;
     user_name: string;
-    friend_status: "friends" | "pending" | "recieved" | "none"
+    relationship: "friends" | "request sent" | "request received" | "none";
 }
 
 async function handleUsersRetrieval(userName: string, jwtToken: string, query:string): Promise<User[]> {

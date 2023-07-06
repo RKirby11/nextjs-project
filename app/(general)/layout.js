@@ -5,7 +5,7 @@ export default function Layout({ children }) {
     const cookieStore = cookies();
     const userName = cookieStore.get('userName');
     const todaysWord = cookieStore.get('dailyWord');
-    const avatarURL = cookieStore.has('avatarURL') ? cookieStore.get('avatarURL').value : '/avatar.svg';
+    const avatarURL = cookieStore.has('avatarURL') ? cookieStore.get('avatarURL').value : '/avatarWhite.svg';
     return (
         <>    
             <header className="z-40 fixed left-0 top-0 w-full h-20 px-10 bg-pink flex justify-between items-center text-white font-bold">
