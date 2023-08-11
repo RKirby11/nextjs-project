@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from 'react';
-import { Spinner } from '@material-tailwind/react';
+import CircularProgress from '@mui/material/CircularProgress';
 import FriendCard from '/components/FriendCard.js';
 
 export default function FriendIndex() {
@@ -32,7 +32,7 @@ export default function FriendIndex() {
     return (
         <div className='flex w-full h-full justify-center items-center'>
             {
-                loading ?   <Spinner color="indigo" className="h-12 w-12"/> :
+                loading ?   <div className="text-blue"><CircularProgress color="inherit" className="h-12 w-12"/></div> :
                 error   ?   <p className="text-gray-500 text-lg italic">Sorry, there was an error loading. Please Try again later.</p> :
                 <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {

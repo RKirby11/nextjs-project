@@ -33,7 +33,7 @@ export default function ImageCropper({uploadedImg, setUploadedImg, onComplete}) 
                     {/* modal template */}
                     <div className="absolute top-0 left-0 z-50 w-screen h-screen bg-offblack opacity-80"/>
                     <div className="absolute top-0 left-0 z-50 w-screen h-screen flex justify-center items-center">
-                        <div className="relative h-5/6 w-5/6 bg-offwhite rounded-lg shadow-lg flex flex-col items-center p-4">
+                        <div className="relative h-5/6 w-5/6 bg-cream rounded-lg shadow-lg flex flex-col items-center p-4">
                             {/* image crop */}
                             <div className="relative h-5/6 w-full bg-offblack rounded-lg">
                                 <Cropper
@@ -73,8 +73,8 @@ export default function ImageCropper({uploadedImg, setUploadedImg, onComplete}) 
                                 </div>
                             </div>
                             <div className='w-full flex justify-center items-center'>
-                                <button className='bg-gray-500 text-white rounded-md px-2 py-1 font-bold text-lg my-5 hover:bg-purple w-32 mr-5' onClick={reset}>Go Back</button>
-                                <button className='bg-pink text-white rounded-md px-2 py-1 font-bold text-lg my-5 hover:bg-purple w-32 ml-5' onClick={returnCroppedImage}>Upload</button>
+                                <button className='bg-gray-500 text-white rounded-md px-2 py-1 font-bold text-lg my-5 hover:bg-dgreen w-32 mr-5' onClick={reset}>Go Back</button>
+                                <button className='bg-red text-white rounded-md px-2 py-1 font-bold text-lg my-5 hover:bg-dgreen w-32 ml-5' onClick={returnCroppedImage}>Upload</button>
                             </div>
                         </div>
                     </div>

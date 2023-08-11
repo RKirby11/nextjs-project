@@ -1,14 +1,25 @@
-import CardLink from "/components/CardLink.js"
+import { cookies } from 'next/headers';
+import UserUpdate from "/components/UserUpdate.js"
+import ExploreToggle from "/components/ExploreToggle.js"
+import CurrentSubmission from "/components/CurrentSubmission.js"
+
 export default function Dashboard() {
+    const cookieStore = cookies();
+    // const status = cookieStore.get('submissionStatus');
+    const submissionComplete = true;
+    const avatarURL = cookieStore.get('avatarURL');
+    const userName = cookieStore.get('userName');
     return (
-        <main className="h-full flex flex-col justify-between">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <CardLink href="/submission" text="Submit Today's Entry"></CardLink>
-                <CardLink href="/history" text="View Past Entries"> </CardLink>
-            </div>
-            <div className="border-2 border-solid border-offblack mt-10 w-full h-full">
-                Something will go here...
-            </div>
+        <main className="relative h-full flex flex-col justify-between">
+            <UserUpdate 
+                submissionComplete={submissionComplete} 
+                avatarURL={avatarURL.value} 
+                userName={userName.value}
+            />
+            { submissionComplete && <CurrentSubmission /> }
+            <ExploreToggle
+                submissionComplete={submissionComplete}
+            />
         </main>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 import TextButton from '/components/TextButton.js';
 import { useState, useCallback } from 'react';
-import { Spinner } from "@material-tailwind/react";
+import CircularProgress from '@mui/material/CircularProgress';
 
 function getText(relationship) {
     switch (relationship) {
@@ -32,7 +32,7 @@ function UpdateOptions({relationship, action}) {
                 </> 
             ) 
         case 'not friends':
-            return <TextButton text="Send Friend Request" color="green" img="/greenPlus.svg" action={() => action('send request')}/>
+            return <TextButton text="Send Friend Request" color="lgreen" img="/lgreenPlus.svg" action={() => action('send request')}/>
         default:
             return
     }
@@ -65,13 +65,13 @@ export default function AddFriend({username, relationship, setRelationship}) {
         <div className="flex flex-col items-center justify-center h-12">
             { 
                 loading 
-                ?   <Spinner color="indigo" className="h-10 w-10"/> 
+                ?   <div className="text-blue"><CircularProgress color="inherit" className="h-10 w-10"/></div>  
                 :   <>
                         <p className='text-gray-700 mb-2'>{getText(relationship.status)}</p>
                         <UpdateOptions relationship={relationship.status} action={(updateType) => updateRelationship(updateType)} />
                     </>
             }
-            <p className="text-purple">{error && "Sorry, we were unable to complete this action, please try again later."}</p>
+            <p className="text-dgreen">{error && "Sorry, we were unable to complete this action, please try again later."}</p>
         </div>
     );
 }

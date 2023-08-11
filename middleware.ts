@@ -4,7 +4,10 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
     const authRoutes =  [
         "/login", 
-        "/signup", 
+        "/register", 
+        "/verify-email",
+        "/request-password-reset",
+        "/reset-password",
         "/api/auth/signup",
         "/api/auth/login", 
         "/api/auth/verify", 

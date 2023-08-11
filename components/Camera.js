@@ -33,14 +33,14 @@ export default function CustomWebcam({useCamera, saveCameraImg}) {
     });
 
     return (
-        <div className="h-[300px] bg-offwhite relative">
+        <div className="h-[300px] bg-cream relative">
             <div className="camView">
                 {isShowVideo &&
                 <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" videoConstraints={videoConstraints} />
                 }
             </div>
             <button 
-                className="absolute bottom-5 left-[130px] w-[40px] h-[40px] bg-offwhite rounded-full outline-double outline-white outline-4"
+                className="absolute bottom-5 left-[130px] w-[40px] h-[40px] bg-cream rounded-full outline-double outline-white outline-4"
                 onClick={capture}
             />
         </div>

@@ -73,13 +73,13 @@ export default class MatchBox extends Component {
     render() {
         return (
             <>
-                {/* Pink Background and Daily Word Appear once Match is Lit */}
+                {/* red Background and Daily Word Appear once Match is Lit */}
                 <div className={
-                    `absolute transition-all duration-[2500ms] ease-out bg-pink 
+                    `absolute transition-all duration-[2500ms] ease-out bg-white 
                     ${this.state.isLocked ? "w-0 h-0 rounded-full blur-3xl" : "w-screen h-screen rounded-none"}`
                 }/>
                 <div className="h-20 mb-16 text-center text-2xl z-10 text-offblack">
-                    <p className={`font-semibold ${this.state.isLocked ? "hidden" : ""}`}>
+                    <p className={`${this.state.isLocked ? "hidden" : ""}`}>
                         Today's Word:<br/>
                         <span className="text-4xl font-bold">{this.props.todaysWord}</span>
                     </p>
@@ -101,7 +101,7 @@ export default class MatchBox extends Component {
                 >
                     <Image 
                         className="pointer-events-none select-none" 
-                        src="/unlitMatch.png" 
+                        src="/images/unlitMatch.png" 
                         width="160" 
                         height="160" 
                         alt="match image"
@@ -112,7 +112,7 @@ export default class MatchBox extends Component {
                             `z-20 pointer-events-none select-none relative -top-40 transition-all duration-1000 
                             ${this.state.isMatchLit ? "opacity-1" : "opacity-0"}`
                         } 
-                        src="/litMatch.png" 
+                        src="/images/litMatch.png" 
                         width="160" 
                         height="160"                         
                         alt="match image"
@@ -125,7 +125,7 @@ export default class MatchBox extends Component {
                 </div>
                 <Image 
                     className="pointer-events-none select-none" 
-                    src="/matchbox.png" 
+                    src="/images/matchbox.png" 
                     width="300" 
                     height="300" 
                     alt="matchbox"

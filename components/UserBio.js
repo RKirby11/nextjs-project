@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { Spinner } from '@material-tailwind/react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function StaticBio({userBio}) {
     return (
@@ -45,13 +45,13 @@ function EditableBio({username, userBio, setUserBio}) {
         <>                
             {
                 bioUpdating
-                ?   <div className='flex w-64 justify-center'>
-                        <Spinner color="indigo" className="h-8 w-8 self-center"/>
+                ?   <div className='flex w-64 justify-center text-blue'>
+                        <CircularProgress color="inherit" className="h-8 w-8 self-center"/>
                     </div>
                 :   <>
                         <div className='flex w-64 justify-center'>
                             <Image 
-                                src={editMode ? '/saveIcon.svg' : '/editIcon.svg'} 
+                                src={editMode ? '/icons/save.svg' : '/icons/edit.svg'} 
                                 alt={editMode ? 'save icon' : 'edit icon'}
                                 width={20} height={20} 
                                 className="cursor-pointer mb-1 mr-2"
@@ -62,7 +62,7 @@ function EditableBio({username, userBio, setUserBio}) {
                         <textarea 
                             className={
                                 `mt-2 w-full resize-none focus:outline-none rounded-md p-2 border-2 
-                                ${editMode ? 'border-blue' : 'border-offwhite'}`
+                                ${editMode ? 'border-blue' : 'border-cream'}`
                             } 
                             ref={bioInput}
                             defaultValue={userBio}

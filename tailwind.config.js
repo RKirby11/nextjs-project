@@ -11,14 +11,17 @@ module.exports = withMT({
   ],
   theme: {
     extend: {
-        colors: {
-            offblack: "#2C2C34",
-            offwhite: "#EEF1EF",
-            pink: "#F38475",
-            blue: "#468189",
-            green: "#4f976d",
-            purple: "#7785AC"
-        }
+      colors: {
+          offblack: "#2E4045",
+          cream: "#F9F0EC",
+          red: "#D45B53",
+          blue: "#8B9CB6",
+          lgreen: "#738E88",
+          dgreen: "#5B7365"
+      },
+      fontFamily: {
+        mono: ['var(--font-montserrat)']
+      }
     },
   },
   plugins: [],

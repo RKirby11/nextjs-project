@@ -1,4 +1,5 @@
 import axios from "axios";
+import { request } from "http";
 import { NextResponse, NextRequest } from 'next/server';
 
 interface LoginForm {
@@ -32,11 +33,9 @@ async function getJwtToken(email: string, password: string, verificationCode: st
 export async function POST(req: NextRequest) {
     try {
         const { email, password, verificationCode }: LoginForm = await req.json();
-        
         if(! email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
             return new NextResponse(JSON.stringify({ error: 'Please enter a valid email address.' }), { status: 400 });
         }
-
         const response: JwtToken = await getJwtToken(email, password, verificationCode);
         const cookieExpiry = new Date(response.jwt.expiry);
 

@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
 import { useState, useCallback, useRef } from 'react';
-import { Spinner } from '@material-tailwind/react';
+import CircularProgress from '@mui/material/CircularProgress';
 import ImageCropper from './ImageCropper';
 import readFile from '/utils/readFile.js';
 
@@ -48,7 +48,7 @@ export default function UserAvatar({username, isEditable, userAvatar, setUserAva
         <div className='flex flex-col items-center'>
             {
                 loading
-                ? <Spinner color="indigo" className="h-12 w-12 my-10"/>
+                ? <div className="text-blue"><CircularProgress color="inherit" className="h-12 w-12 my-10"/></div>
                 : <>
                     <Image src={userAvatar} width="175" height="175" alt='User Avatar' className='mb-5 rounded-full'/>
                     <div className={`${isEditable ? "block" : "hidden"}`}>
@@ -56,7 +56,7 @@ export default function UserAvatar({username, isEditable, userAvatar, setUserAva
                             htmlFor="avatar-upload" 
                             className="cursor-pointer flex items-center hover:underline"
                         >
-                            <Image src='/uploadIcon.svg' width="20" height="20" alt='upload icon' className='mb-1'/>
+                            <Image src='/icons/upload.svg' width="20" height="20" alt='upload icon' className='mb-1'/>
                             Upload New Profile Photo
                         </label>
                         <input

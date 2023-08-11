@@ -71,7 +71,7 @@ export default function SubmissionEntry() {
                     status === 'upload' && useCamera ?
                         <Camera useCamera={useCamera} saveCameraImg={saveCameraImg}></Camera> 
                     : status === 'upload' ?
-                        <Image src="/camera.svg" width="200" height="200" alt='Camera Icon'/>
+                        <Image src="/icons/camera.svg" width="200" height="200" alt='Camera Icon'/>
                     : status === 'confirm' ?
                         <>
                             <Image
@@ -81,35 +81,35 @@ export default function SubmissionEntry() {
                                 src={fileContent}
                             />
                             <div className="w-[300px] flex mt-5 flex-col align-center items-center">
-                                <h2 className="text-2xl font-bold text-pink">Looks Great!</h2>
+                                <h2 className="text-2xl font-bold text-red">Looks Great!</h2>
                                 <textarea
                                     placeholder="Add a note?.."
                                     maxLength="200"
                                     rows="2"
-                                    className="p-2 resize-none text-offblack bg-white w-full border-2 border-solid border-pink rounded-md mt-5 focus:outline-purple"
+                                    className="p-2 resize-none text-offblack bg-white w-full border-2 border-solid border-red rounded-md mt-5 focus:outline-dgreen"
                                     onChange={(event) => setNote(event.target.value)}
                                 ></textarea>
-                                <button className="bg-pink w-full h-10 text-white rounded-sm mt-4" onClick={submit}>
+                                <button className="bg-red w-full h-10 text-white rounded-sm mt-4" onClick={submit}>
                                     Submit!
                                 </button>
-                                <button className="w-1/2 flex justify-center items-center text-center mt-4 border-b-2 border-bottom hover:border-purple italic" onClick={() => reset()}>
-                                    <Image src="/arrowLeft.svg" className='mr-2 mb-1' width="15" height="15" alt='Back Arrow'/>
+                                <button className="w-1/2 flex justify-center items-center text-center mt-4 border-b-2 border-bottom hover:border-dgreen italic" onClick={() => reset()}>
+                                    <Image src="/icons/arrowLeft.svg" className='mr-2 mb-1' width="15" height="15" alt='Back Arrow'/>
                                     Back
                                 </button>
-                                <p className={`w-full mt-5 text-purple text-center ${ error ? "block" : "hidden"}`}>
+                                <p className={`w-full mt-5 text-dgreen text-center ${ error ? "block" : "hidden"}`}>
                                     {error}
                                 </p>
                             </div>
                         </>
                     : status === 'complete' ?
                         <>
-                            <Image src="/greenTick.svg" width="300" height="300" alt='Green Tick Icon'/>
-                            <p className={`w-full mt-5 text-xl text-green font-bold text-center`}>
+                            <Image src="/lgreenTick.svg" width="300" height="300" alt='lgreen Tick Icon'/>
+                            <p className={`w-full mt-5 text-xl text-lgreen font-bold text-center`}>
                                 Submission Complete!
                             </p>
                             <div className="flex mt-5 flex-col align-center items-center">
                                 <Link 
-                                    className="bg-purple w-full h-10 px-4 text-white rounded-md mt-4 flex justify-center items-center" 
+                                    className="bg-dgreen w-full h-10 px-4 text-white rounded-md mt-4 flex justify-center items-center" 
                                     href='/history'
                                 >
                                     View Past Entries
@@ -123,7 +123,7 @@ export default function SubmissionEntry() {
                 <div className={`flex ${status === 'upload' && !useCamera ? "block" : "hidden"}`}>
                     <label 
                         htmlFor="imageUpload" 
-                        className="p-5 rounded-md bg-pink text-white cursor-pointer mr-5"
+                        className="p-5 rounded-md bg-red text-white cursor-pointer mr-5"
                     >
                         Upload Image
                     </label>
@@ -139,7 +139,7 @@ export default function SubmissionEntry() {
                 </div>
                 <div className={`flex ${ status === 'upload' ? "block" : "hidden"}`}>
                     <button 
-                        className="p-5 rounded-md bg-pink text-white ml-5"  
+                        className="p-5 rounded-md bg-red text-white ml-5"  
                         onClick={() => setUseCamera(!useCamera)}
                     >
                         { useCamera ? "Stop Camera" : "Take Photo"}

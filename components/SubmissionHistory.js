@@ -2,7 +2,7 @@
 import React, { useState,  useEffect, useCallback} from "react";
 import SubmissionCard from "./SubmissionCard";
 import SubmissionModal from "./SubmissionModal";
-import { Spinner } from "@material-tailwind/react";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function SubmissionHistory() {
     const [submissions, setSubmissions] = useState([]);
@@ -67,18 +67,18 @@ export default function SubmissionHistory() {
             <div className="flex w-full justify-center mt-8 text-lg">
                 {
                     loading 
-                    ? <Spinner color="indigo" className="h-12 w-12"/> 
+                    ? <div className="text-blue"><CircularProgress color="inherit" className="h-12 w-12"/></div>
                     :   <>
                             <button 
                                 className={
-                                    `h-12 w-64 text-pink font-bold border-pink border-2 border-solid rounded-md
-                                    hover:bg-pink hover:text-white transition-all duration-300 ease-in-out 
+                                    `h-12 w-64 text-red font-bold border-red border-2 border-solid rounded-md
+                                    hover:bg-red hover:text-white transition-all duration-300 ease-in-out 
                                     ${ hasMore ? "block" : "hidden"}`
                                 }
                                 onClick={loadMore}
                             >Load More
                             </button>
-                            <p className={`text-purple ${error ? "block" : "hidden"}`}>{ error }</p>
+                            <p className={`text-dgreen ${error ? "block" : "hidden"}`}>{ error }</p>
                         </>
                 }
             </div>
